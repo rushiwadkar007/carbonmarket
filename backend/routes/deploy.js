@@ -9,9 +9,6 @@ const { saveContract } = require('../dbops');
 const provider = process.env.INFURA_ENDPOINT;
 const privateKey = process.env.METAMASK_PVT_KEY;
 
-console.log('provider:', provider);
-console.log('privateKey:', privateKey);
-
 const web3 = new Web3(provider);
 
 const abi = ContractData.abi;
@@ -60,9 +57,8 @@ router.post('/tokenContract',async (req,res)=>{
         const signedTx = await web3.eth.accounts.signTransaction(deployOptions, privateKey);
         const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
 
-        console.log('receipt:', receipt);
-
         const savedContract = await saveContract({ contractId : receipt.contractAddress });
+        console.log("savedContract ", savedContract);
 
         res.status(200).send({
             success : true,
